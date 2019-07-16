@@ -47,6 +47,41 @@ class App extends Component {
     let g = this.state.gridFull;
     let g2 = arrayClone(this.state.gridFull);
     // TODO Rules algo here
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.cols; j++) {
+        // permutations
+        // --------------------
+        // i-1  |  j  | j+1  | j-1
+        // i+1  |  j  | j+1  | j-1
+        // j-1  |  i  | i+1  | i-1
+        // j+1  |  i  | i+1  | i-1
+        // Any live cell with fewer than two live neighbors dies, as if by underpopulation.
+        // Any live cell with two or three live neighbors lives on to the next generation.
+        // Any live cell with more than three live neighbors dies, as if by overpopulation.
+        // Any dead cell with three live neighbors becomes a live cell, as if by reproduction.
+        // keeps track of how many true or "live" boxes are neighbors.
+        let count = 0;
+        // look for the box to the left of the current box if it is true increment count
+        if (i > 0) if (g[ i - 1 ][ j ]) count++;
+        // look for the box that is i-1 the current box if true increment count
+        if (i > 0 && j > 0) if (g[ i - 1 ]) count++;
+        // Look for the box up 1 and to the left 1
+        if (i > 0 && j < this.cols - 1) if (g[ i - 1 ][ j + 1 ]) count++
+        // Look for the box above current box
+        if (j < this.cols - 1) if (g[ i ][ j + 1 ]) count++
+        // look for the box below the current box
+        if (j > 0) if (g[ i ][ j - 1 ]) count++
+        if (i < this.rows - 1) if (g[ i + 1 ][ j ]) count++;
+        if (i < this.rows - 1 && j > 0) if (g[ i + 1 ][ j - 1 ]) count++;
+        if (i < this.rows - 1 && j < this.cols - 1) if (g[ i + 1 ][ j + 1 ]) count++;
+        if (g[ i ][ j ] && (count < 2 || count > 3)) g2[ i ][ j ] = false;
+        if (!g[ i ][ j ] && count === 3) g2[ i ][ j ] = true;
+        // Set new grid
+        // Use the count to set to true or false depending on number of neighbors
+        if (g[ i ][ j ] && (count < 2 || count > 3)) g2[ i ][ j ] = false;
+        if (!g[ i ][ j ] && count === 3) g2[ i ][ j ] = true
+      }
+    }
 
     this.setState({
       gridFull: g2,
@@ -82,19 +117,17 @@ class App extends Component {
               <button>Preset 2</button>
             </div>
           </section>
-          {/* <section className="rules-wrapper ">
+          <section className="rules-wrapper ">
             <h2>Rules:</h2>
             <ul className='container'>
-              <li>
-                If the cell is alive and has 2 or 3 neighbors, then it remains alive. Else it dies.
-                </li>
-              <li>
-                If the cell is dead and has exactly 3 neighbors, then it comes to life. Else if remains dead.
-                </li>
+              <li>Any live cell with fewer than two live neighbors dies, as if by underpopulation.</li>
+              <li>Any live cell with two or three live neighbors lives on to the next generation.</li>
+              <li>Any live cell with more than three live neighbors dies, as if by overpopulation.</li>
+              <li>Any dead cell with three live neighbors becomes a live cell, as if by reproduction.</li>
             </ul>
-          </section> */}
+          </section>
         </div>
-        {/* <section id='about'>
+        <section id='about'>
           <h2>About this Algorithm:
         </h2>
           <p>
@@ -165,7 +198,7 @@ class App extends Component {
 
               Also note that this approach is vaguely reminiscent of the Model and View in the MVC pattern where the
             Model is manipulated then displayed by the View.</p>
-        </section> */}
+        </section>
       </div >
     );
   }
