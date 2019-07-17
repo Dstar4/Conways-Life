@@ -35,6 +35,23 @@ class App extends Component {
       gridFull: gridCopy
     });
   }
+  pauseButton = () => {
+    // TODO Pause stuff
+    console.log("pause button")
+    clearInterval(this.intervalId)
+  }
+  resetButton = () => {
+    console.log("reset button")
+    clearInterval(this.intervalId)
+    let gridCopy = arrayClone(this.state.gridFull);
+    //TODO reset stuff
+    this.setState({
+      gridFull: gridCopy
+    })
+    this.seed()
+
+
+  }
 
   playButton = () => {
     console.log("play button")
@@ -118,7 +135,7 @@ class App extends Component {
             cols={this.cols}
             selectBox={this.selectBox}
           />
-          <Buttons playButton={this.playButton} />
+          <Buttons playButton={this.playButton} resetButton={this.resetButton} pauseButton={this.pauseButton} />
           <section id='presets-wrapper' className='container'>
             <div className='container'>
               <h2>Generations: {this.state.generation}</h2>
