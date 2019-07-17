@@ -7,6 +7,7 @@ class Buttons extends React.Component {
                 <button onClick={this.props.playButton}>Play</button>
                 <button onClick={this.props.pauseButton}>Pause</button>
                 <button onClick={this.props.resetButton}>Reset</button>
+                <button onClick={this.props.incrementButton}>Increment</button>
             </div>
         )
     }

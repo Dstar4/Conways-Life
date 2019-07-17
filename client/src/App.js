@@ -43,6 +43,7 @@ class App extends Component {
   resetButton = () => {
     console.log("reset button")
     clearInterval(this.intervalId)
+    this.setState({ generation: 0 })
     let gridCopy = arrayClone(this.state.gridFull);
     //TODO reset stuff
     this.setState({
@@ -52,7 +53,11 @@ class App extends Component {
 
 
   }
-
+  incrementButton = () => {
+    this.setState({
+      generation: this.state.generation + 1
+    })
+  }
   playButton = () => {
     console.log("play button")
     clearInterval(this.intervalId)
@@ -119,10 +124,11 @@ class App extends Component {
 
   componentDidMount() {
     this.seed();
-    this.playButton();
+    // this.playButton();
   }
 
   render() {
+
     return (
       <div className='container help' >
         <h1>Cellular Automata and Conway's "Game of Life"</h1>
@@ -135,7 +141,8 @@ class App extends Component {
             cols={this.cols}
             selectBox={this.selectBox}
           />
-          <Buttons playButton={this.playButton} resetButton={this.resetButton} pauseButton={this.pauseButton} />
+          <Buttons playButton={this.playButton} resetButton={this.resetButton} pauseButton={this.pauseButton} incrementButton={this.incrementButton} />
+
           <section id='presets-wrapper' className='container'>
             <div className='container'>
               <h2>Generations: {this.state.generation}</h2>
