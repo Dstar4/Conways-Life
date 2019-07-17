@@ -5,14 +5,13 @@ import Buttons from './components/Buttons';
 class App extends Component {
   constructor() {
     super()
-    this.speed = 100;
+    this.speed = 1;
     this.rows = 30;
     this.cols = 50;
 
     this.state = {
       generation: 0,
       gridFull: Array(this.rows).fill().map(() => Array(this.cols).fill(false))
-
     }
   }
 
@@ -27,7 +26,7 @@ class App extends Component {
     let gridCopy = arrayClone(this.state.gridFull);
     for (let i = 0; i < this.rows; i++) {
       for (let j = 0; j < this.cols; j++) {
-        if (Math.floor(Math.random() * 4) === 1) {
+        if (Math.floor(Math.random() * 3) === 1) {
           gridCopy[ i ][ j ] = true
         }
       }
@@ -51,29 +50,41 @@ class App extends Component {
       for (let j = 0; j < this.cols; j++) {
         // permutations
         // --------------------
+        // top left
+        // [i-1][j-1]
+        // top
+        // [i][j-1]
+        // top right
+        // [i+1][j+1]
+
+
         // i-1  |  j  | j+1  | j-1
         // i+1  |  j  | j+1  | j-1
         // j-1  |  i  | i+1  | i-1
         // j+1  |  i  | i+1  | i-1
+
+
+        //left box
+
         // Any live cell with fewer than two live neighbors dies, as if by underpopulation.
         // Any live cell with two or three live neighbors lives on to the next generation.
         // Any live cell with more than three live neighbors dies, as if by overpopulation.
         // Any dead cell with three live neighbors becomes a live cell, as if by reproduction.
         // keeps track of how many true or "live" boxes are neighbors.
+
         let count = 0;
-        // look for the box to the left of the current box if it is true increment count
-        if (i > 0) if (g[ i - 1 ][ j ]) count++;
+        if (i > 0) if (g[ i - 1 ][ j ]) count++; // left
         // look for the box that is i-1 the current box if true increment count
-        if (i > 0 && j > 0) if (g[ i - 1 ]) count++;
+        if (i > 0 && j > 0) if (g[ i - 1 ][ j - 1 ]) count++; // lower left
         // Look for the box up 1 and to the left 1
-        if (i > 0 && j < this.cols - 1) if (g[ i - 1 ][ j + 1 ]) count++
+        if (i > 0 && j < this.cols - 1) if (g[ i - 1 ][ j + 1 ]) count++; // upper left
         // Look for the box above current box
-        if (j < this.cols - 1) if (g[ i ][ j + 1 ]) count++
+        if (j < this.cols - 1) if (g[ i ][ j + 1 ]) count++; // upper
         // look for the box below the current box
-        if (j > 0) if (g[ i ][ j - 1 ]) count++
-        if (i < this.rows - 1) if (g[ i + 1 ][ j ]) count++;
-        if (i < this.rows - 1 && j > 0) if (g[ i + 1 ][ j - 1 ]) count++;
-        if (i < this.rows - 1 && j < this.cols - 1) if (g[ i + 1 ][ j + 1 ]) count++;
+        if (j > 0) if (g[ i ][ j - 1 ]) count++; // lower
+        if (i < this.rows - 1) if (g[ i + 1 ][ j ]) count++; // right
+        if (i < this.rows - 1 && j > 0) if (g[ i + 1 ][ j - 1 ]) count++; // lower right
+        if (i < this.rows - 1 && j < this.cols - 1) if (g[ i + 1 ][ j + 1 ]) count++; //lower left
         if (g[ i ][ j ] && (count < 2 || count > 3)) g2[ i ][ j ] = false;
         if (!g[ i ][ j ] && count === 3) g2[ i ][ j ] = true;
         // Set new grid
@@ -81,8 +92,8 @@ class App extends Component {
         if (g[ i ][ j ] && (count < 2 || count > 3)) g2[ i ][ j ] = false;
         if (!g[ i ][ j ] && count === 3) g2[ i ][ j ] = true
       }
-    }
 
+    }
     this.setState({
       gridFull: g2,
       generation: this.state.generation + 1
@@ -204,8 +215,10 @@ class App extends Component {
   }
 }
 
+// deep clone for arr
 function arrayClone(arr) {
   return JSON.parse(JSON.stringify(arr))
+  // Array.from(arr)
 }
 
 export default App;
