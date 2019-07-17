@@ -5,7 +5,7 @@ import Buttons from './components/Buttons';
 class App extends Component {
   constructor() {
     super()
-    this.speed = 1;
+    this.speed = 100;
     this.rows = 30;
     this.cols = 50;
 
