@@ -1,16 +1,21 @@
 import React, { Component } from 'react';
 import { Grid } from './components/Grid'
 import Buttons from './components/Buttons';
+// import styled from 'styled-components'
+
+
+
 
 class App extends Component {
   constructor() {
     super()
-    this.speed = 100;
     this.rows = 30;
     this.cols = 50;
 
     this.state = {
-      generation: 0,
+      generations: 0,
+      speed: 100,
+      speedIndex: 0,
       gridFull: Array(this.rows).fill().map(() => Array(this.cols).fill(false))
     }
   }
@@ -36,7 +41,6 @@ class App extends Component {
     });
   }
   pauseButton = () => {
-    // TODO Pause stuff
     console.log("pause button")
     clearInterval(this.intervalId)
   }
@@ -45,23 +49,32 @@ class App extends Component {
     clearInterval(this.intervalId)
     this.setState({ generation: 0 })
     let gridCopy = arrayClone(this.state.gridFull);
-    //TODO reset stuff
     this.setState({
       gridFull: gridCopy
     })
     this.seed()
-
-
   }
-  incrementButton = () => {
-    this.setState({
-      generation: this.state.generation + 1
-    })
+  speedButton = () => {
+    const speeds = [ 4, 200, 1000 ]
+    if (this.state.speedIndex < speeds.length - 1) {
+      this.setState({
+        speedIndex: this.state.speedIndex + 1,
+        speed: speeds[ this.state.speedIndex ]
+      })
+    } else {
+      this.setState({
+        speedIndex: 0,
+        speed: speeds[ this.state.speedIndex ]
+      })
+    }
+    clearInterval(this.intervalId)
+    this.intervalId = setInterval(this.play, this.state.speed)
+
   }
   playButton = () => {
-    console.log("play button")
     clearInterval(this.intervalId)
-    this.intervalId = setInterval(this.play, this.speed)
+    this.setState({ generation: 0 })
+    this.intervalId = setInterval(this.play, this.state.speed)
   }
 
   play = () => {
@@ -124,11 +137,16 @@ class App extends Component {
 
   componentDidMount() {
     this.seed();
-    // this.playButton();
+    this.playButton();
   }
+  // gridSize = (r = 30, c = 50) => {
+  //   this.rows = r
 
+  //   this.cols = c
+  // }
   render() {
-
+    // console.log(this.rows)
+    // console.log(this.cols)
     return (
       <div className='container help' >
         <h1>Cellular Automata and Conway's "Game of Life"</h1>
@@ -141,8 +159,20 @@ class App extends Component {
             cols={this.cols}
             selectBox={this.selectBox}
           />
-          <Buttons playButton={this.playButton} resetButton={this.resetButton} pauseButton={this.pauseButton} incrementButton={this.incrementButton} />
-
+          <Buttons
+            playButton={this.playButton}
+            resetButton={this.resetButton}
+            pauseButton={this.pauseButton}
+            incrementButton={this.play}
+            speedButton={this.speedButton}
+            speed={this.state.speed}
+          />
+          {/* <div> */}
+          {/* Grid Size: */}
+          {/* <button onClick={(e) => this.gridSize(30, 50)}>30X50</button> */}
+          {/* <button onClick={(e) => this.gridSize(50, 50)}>50X50</button> */}
+          {/* <button onClick={this.gridSize(100, 100)}>100X100</button> */}
+          {/* </div> */}
           <section id='presets-wrapper' className='container'>
             <div className='container'>
               <h2>Generations: {this.state.generation}</h2>
