@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Grid } from './components/Grid'
 import Buttons from './components/Buttons';
+import './index.css'
 // import styled from 'styled-components'
 
 
@@ -53,6 +54,14 @@ class App extends Component {
       gridFull: gridCopy
     })
     this.seed()
+  }
+  clearButton = () => {
+    clearInterval(this.intervalId)
+    this.setState({ generation: 0 })
+    let gridCopy = arrayClone(this.state.gridFull);
+    this.setState({
+      gridFull: gridCopy
+    })
   }
   speedButton = () => {
     const speeds = [ 4, 200, 1000 ]
@@ -148,121 +157,103 @@ class App extends Component {
     // console.log(this.rows)
     // console.log(this.cols)
     return (
-      <div className='container help' >
-        <h1>Cellular Automata and Conway's "Game of Life"</h1>
-        <div id='top-level' className='help container'>
-          <section className='help'>
-          </section>
-          <Grid
-            gridFull={this.state.gridFull}
-            rows={this.rows}
-            cols={this.cols}
-            selectBox={this.selectBox}
-          />
-          <Buttons
-            playButton={this.playButton}
-            resetButton={this.resetButton}
-            pauseButton={this.pauseButton}
-            incrementButton={this.play}
-            speedButton={this.speedButton}
-            speed={this.state.speed}
-          />
-          {/* <div> */}
-          {/* Grid Size: */}
-          {/* <button onClick={(e) => this.gridSize(30, 50)}>30X50</button> */}
-          {/* <button onClick={(e) => this.gridSize(50, 50)}>50X50</button> */}
-          {/* <button onClick={this.gridSize(100, 100)}>100X100</button> */}
-          {/* </div> */}
+      <div className='container' >
+        <div className='head-wrapper'>
+          <h1 className='header'>Cellular Automata and Conway's "Game of Life"</h1>
+
+          <div id='top-level' className='center'>
+            <Grid
+              gridFull={this.state.gridFull}
+              rows={this.rows}
+              cols={this.cols}
+              selectBox={this.selectBox}
+            />
+            <Buttons
+              playButton={this.playButton}
+              resetButton={this.resetButton}
+              pauseButton={this.pauseButton}
+              incrementButton={this.play}
+              speedButton={this.speedButton}
+              speed={this.state.speed}
+              clear={this.clearButton}
+            />
+          </div>
           <section id='presets-wrapper' className='container'>
-            <div className='container'>
-              <h2>Generations: {this.state.generation}</h2>
-              <button>Preset 1</button>
-            </div>
-            <div className='container'>
-              <button>Preset 2</button>
-            </div>
+            <h2>Generations: {this.state.generation}</h2>
+            <button>Preset 1</button>
+            <button>Preset 2</button>
+
+            <section className="rules-wrapper ">
+              <h2>Rules:</h2>
+              <ul className='container'>
+                <li>Any live cell with fewer than two live neighbors dies, as if by underpopulation.</li>
+                <li>Any live cell with two or three live neighbors lives on to the next generation.</li>
+                <li>Any live cell with more than three live neighbors dies, as if by overpopulation.</li>
+                <li>Any dead cell with three live neighbors becomes a live cell, as if by reproduction.</li>
+              </ul>
+            </section>
           </section>
-          <section className="rules-wrapper ">
-            <h2>Rules:</h2>
-            <ul className='container'>
-              <li>Any live cell with fewer than two live neighbors dies, as if by underpopulation.</li>
-              <li>Any live cell with two or three live neighbors lives on to the next generation.</li>
-              <li>Any live cell with more than three live neighbors dies, as if by overpopulation.</li>
-              <li>Any dead cell with three live neighbors becomes a live cell, as if by reproduction.</li>
-            </ul>
-          </section>
+          <hr />
         </div>
         <section id='about'>
-          <h2>About this Algorithm:
-        </h2>
+          <h2>The making of Conway's game of life</h2>
           <p>
-            A cellular automaton (plural: cellular automata, abbreviated CA) is a program that operates on data
-            typically stored in a 2D grid. (1D, 3D and n-D cellular automata run on lines, cubes, etc.)
+            When trying to tackle the problem of implementing my own version of Conway;s Game of Life I first reached to Polya's Problem Solving Techniques to break the problem down into pieces that are easier to tackle. The first step is to understand. To understand this problem I wanted to do more than just get a solution. I wanted to understand some of the history behind it and how it relates to computing history.</p>
 
-            A simple set of rules describes how the value in a cell on the grid changes over time, often as the
-            result of the states of that cell's neighbors.
+          <h3>Step 1 - Understand**</h3>
+          <h4>History</h4>
 
-            Sometimes neighbors includes the 4 orthogonally adjacent cells; sometimes it includes all 8 surrounding
-            cells including diagonals.
+          <p>The origins of Conway's Game of Life go back to a British mathematician John Horton Conway who came up with a famous version of the Life concept theorized in the 1940's. These early versions of Life were an attempt to replicate a Turing Machine.</p>
 
-            Each round of the simulation examines the current state of the grid, and then produces an entirely new
-            grid consisting of the old state. (Remember the discussion about double buffers earlier--we don't want
-            to modify the same grid we're examining, lest we munge future results.)
+          <h4>Touring Machine</h4>
 
-            This new grid becomes the "current" state of the simulation, and the process repeats. Each new grid is
-            referred to as a generation.
+          <p>A Turing Machine is an abstract concept of a machine that can read an *infinite tape* which is divided into cells. A *head* would move over this tape and read or write the cells one at a time. The *state register* would hold what was then though of as the *state of mind*. This could be compared to something like scope in a modern programming language which holds the variables and functions you currently have access to. Lastly a *table* of instructions is needed. This will tell the head to move over the tape, read or write a cell, and to control the state register. This idea of a Turing machine was created by Alan Turing and was used to  break German codes in World War II. This was the early thought behind creating a CPU for a computer.</p>
 
-            The beautiful thing about cellular automata is that sometimes very complex behavior can emerge from very
-            simple rules.
 
-            Practically speaking, CAs have been used in biological and chemical simulations and other areas of
-            research, such as CA-based computer processors, and other numeric techniques.
-        </p>
-          <p>
-            Turing Completeness
-            We say a computing system is Turing Complete if it is capable of performing arbitrary, general purpose
-            computation.
+          <h4>Conway's Life</h4>
 
-            Using a construct in The Game of Life called a glider gun, it's possible to build a rudimentary NAND
-            gate in the Game of Life. While a NAND gate by itself isn't enough to be Turing Complete, the "infinite"
-            grid of The Game of Life allows you to use them (or any other functionally complete operator) to build
-            any other type of logical "circuitry" and memory, as well.
+          <p>The general concept of Life had been around for about 30 years prior to John Conway's popularization by using a 2D array. After his implementation the area exploded with new growth and began to reach outside the world of academia.
 
-            Anything computable can be computed in The Game of Life given a large enough grid and enough time. Most
-            people, however, find JavaScript to be a far easier development medium.
-        </p>
-          <h4>
-            Double Buffering
+          The idea of cellular automaton was that you take a grid and a finite number of states (like off and on). Each state of an individual cell would then affect the state of a neighboring cell. Using this idea a set of rules for Life developed.</p>
 
-        </h4>
-          <p>There's a technique that's commonly used in graphics programming called double buffering. This is when we
-              display one buffer to the user, but do work on one that's hidden from sight. In this way, the user
-              doesn't see the buffer being generated, they only see the one that was previously completed.
+          <h4>Conway's Rules</h4>
 
-              When we're done doing work on the hidden buffer, we page flip and show the hidden buffer to the user.
-              Then the previously-displayed buffer becomes the new hidden buffer, and work begins again.
+          <ul>
+            <li>Any live cell with fewer than two live neighbors dies, as if by underpopulation.</li>
 
-              There are multiple benefits to this approach.
+            <li>Any live cell with two or three live neighbors lives on to the next generation.</li>
 
-              One is that the user doesn't see the work being progressively completed. From their perspective, the
-              work is suddenly done as soon as the page flips.
+            <li>Any live cell with more than three live neighbors dies, as if by overpopulation.</li>
 
-              Another is that the program can use the previous buffer (i.e. the one that is currently being displayed)
-              as a source for material to perform calculations to produce the next buffer. This is particularly
-              beneficial where you need to produce a completely new output based on the complete previous output. If
-              you were to only use a single buffer, you'd have to overwrite the pixels as you went, and this might
-              affect the outcome of the subsequent pixels in an undesirable way.
+            <li>Any dead cell with three live neighbors becomes a live cell, as if by reproduction.</li>
+          </ul>
 
-              And this is very useful when implementing a cellular automaton.
+          <h4>Step 2 - Plan</h4>
+          <p>Armed with our knowledge of the history of the problem and the rules we can go about thinking how to implement this ourselves. A good first step is to think about how you would implement the grid. We know that as we go through generations this will need to animate quickly and need to keep that in mind. I decided to implement my solution with a series of boxes with a border that forms a grid. You could also do this with the HTML `canvas` element. This would generally be a more performant way of running this.</p>
 
-              There will be two arrays of data for the automaton. One of them holds the data that the user currently
-              sees on the canvas. The other one is where the next frame to be shown is being actively constructed.
+          <p>Once we have a grid set up we need to start thinking about how we can represent our data in the grid. This would be a good time to look over something called a double buffer. A double buffer will allow us to display one set of data and then switch to a whole new set all at one, to prevent a partial update. This is very much like the problem in cellular automaton where we need to be able to change the state based on our neighbors, but all at once, not one at a time. If we just ran through the elements changing values we would not get an accurate result, so we need to make sure we do not manipulate the array of values while we are still constructing the new array. Once we have finished constructing our new array of values we need to replace the first one with it.</p>
 
-              After the new frame is constructed, the next from becomes the current frame, and the current frame
-              becomes the next frame. And the process repeats.
+          <p>But how do we change those values to construct the second array? To do this we need to implement Conway's Rules of Life. This is not easy, but there are a few concepts that will really . We need to think about how to identify all neighbors of a cell in a grid. We can do this with two loops running through our rows and columns of the grid.</p>
 
-              Also note that this approach is vaguely reminiscent of the Model and View in the MVC pattern where the
-            Model is manipulated then displayed by the View.</p>
+          <p>There are 8 neighbors for every cell. If we are representing our current row and the current column running in loops, we can think about selecting our neighbors like this.</p>
+          <figure>
+            <pre>
+              <code>[col - 1, row + 1]   [col, row + 1]   [col + 1, row + 1]</code><br />
+              <code>[col - 1, row]       [col, row]       [col + 1, row]</code><br />
+              <code>[col - 1, row - 1]   [col, row - 1]   [col + 1, row - 1]</code><br />
+            </pre>
+          </figure>
+
+
+          <p>Now that we can select the cells we need we can start to count up the live cells around us and then apply conway's rules to see if the cell will make it to the next generation. Once we have achieved this we can set the arrays for the next generation and display the new one in our grid. Doing something like changing the color of a cell for live or dead is a great way to see your progress.</p>
+
+          <h4>Step 3 - Carry out the plan</h4>
+
+          <p>We have a good plan together, we understand the problem. It is time to start coding. You may run into unexpected hurdles here but stick with the plan. Make sure you refer back to the plan when you get stuck, and if you still feel lost maybe you need to go back to Step 1 and understand the problem a bit better. If you go back with a more specific problem this can be ful for fully understanding.</p>
+
+          <h4>Step 4 - Look Back</h4>
+
+          <p>Now that you have come to a solution you are ready to look back on what you did, and think about what you can do better or some possible edge cases you may not have accounted for. See if you can optimize your code to run as fast as possible, or make your grid really large to test your performance.</p>
         </section>
       </div >
     );
