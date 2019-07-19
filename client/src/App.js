@@ -28,11 +28,11 @@ class App extends Component {
       gridFull: gridCopy
     })
   }
-  seed = () => {
+  seed = (int) => {
     let gridCopy = arrayClone(this.state.gridFull);
     for (let i = 0; i < this.rows; i++) {
       for (let j = 0; j < this.cols; j++) {
-        if (Math.floor(Math.random() * 3) === 1) {
+        if (Math.floor(Math.random() * int) === 1) {
           gridCopy[ i ][ j ] = true
         }
       }
@@ -53,15 +53,23 @@ class App extends Component {
     this.setState({
       gridFull: gridCopy
     })
-    this.seed()
+    this.seed(4)
   }
   clearButton = () => {
     clearInterval(this.intervalId)
     this.setState({ generation: 0 })
-    let gridCopy = arrayClone(this.state.gridFull);
+    let gridCopy = Array(this.rows).fill().map(() => Array(this.cols).fill(false))
     this.setState({
       gridFull: gridCopy
     })
+  }
+  preset1 = () => {
+    this.clearButton()
+    this.seed(2)
+  }
+  preset2 = () => {
+    this.clearButton()
+    this.seed(8)
   }
   speedButton = () => {
     const speeds = [ 4, 200, 1000 ]
@@ -85,7 +93,6 @@ class App extends Component {
     this.setState({ generation: 0 })
     this.intervalId = setInterval(this.play, this.state.speed)
   }
-
   play = () => {
     let g = this.state.gridFull;
     let g2 = arrayClone(this.state.gridFull);
@@ -145,7 +152,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    this.seed();
+    this.seed(4);
     this.playButton();
   }
   // gridSize = (r = 30, c = 50) => {
@@ -180,8 +187,8 @@ class App extends Component {
           </div>
           <section id='presets-wrapper' className='container'>
             <h2>Generations: {this.state.generation}</h2>
-            <button>Preset 1</button>
-            <button>Preset 2</button>
+            <button className='control-button' onClick={this.preset1}>Preset 1</button>
+            <button className='control-button' onClick={this.preset2}>Preset 2</button>
 
             <section className="rules-wrapper ">
               <h2>Rules:</h2>
