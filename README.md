@@ -1,121 +1,66 @@
-# Cellular Automata and Conway's "Game of Life"
+# The making of Conway's game of life
 
-Over the course of this week, students will work on creating their own application in which users will be able to run different "Game of Life" scenarios. This module leads the reader through the fundamentals of Conways's "Game of Life" and will guide them through the process of creating an app utilizing tools and frameworks that have been taught over the course of their specific track.
+When trying to tackle the problem of implementing my own version of Conway;s Game of Life I first reached to Polya's Problem Solving Techniques to break the problem down into pieces that are easier to tackle. The first step is to understand. To understand this problem I wanted to do more than just get a solution. I wanted to understand some of the history behind it and how it relates to computing history.
 
-![example-patterns](https://media.giphy.com/media/4VVZTvTqzRR0BUwNIH/giphy.gif)
+---
+## **Step 1 - Understand**
 
-[from Wikipedia](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life#Examples_of_patterns)
+## History
 
-## Objectives
-* Student should be able to create a unique, high-quality project that can be added to a professional portfolio
-* [Student should be able to describe the rules of Conway’s “Game of Life”](objectives/rules-game-life)
-* [Student should be able to explain what cellular automata are and describe how they are useful in real life](objectives/explain-describe-ca)
-* [Student should be able to correctly analyze the ‘Turing Completeness’ of Conway’s “Game of Life”](objectives/turing-complete)
-* [Student should be able to implement a visualization of Conway’s “Game of Life” using technologies related to their specific track](objectives/visualization)
-* [Student should be able to utilize “double buffering” to implement animations](objectives/double-buffer)
+The origins of Conway's Game of Life go back to a British mathematician John Horton Conway who came up with a famous version of the Life concept theorized in the 1940's. These early versions of Life were an attempt to replicate a Turing Machine.
 
+**Touring Machine**
 
-## Git Commits
-
-- You are required to showcase progress with at least 1 commit a day.
-  This will let your project manager know where you are and if you need
-  help. This also allows the client to get progress reports from the
-  company in a real world setting.
+A Turing Machine is an abstract concept of a machine that can read an *infinite tape* which is divided into cells. A *head* would move over this tape and read or write the cells one at a time. The *state register* would hold what was then though of as the *state of mind*. This could be compared to something like scope in a modern programming language which holds the variables and functions you currently have access to. Lastly a *table* of instructions is needed. This will tell the head to move over the tape, read or write a cell, and to control the state register. This idea of a Turing machine was created by Alan Turing and was used to help break German codes in World War II. This was the early thought behind creating a CPU for a computer.
 
 
-## Trello Set Up:
+**Conway's Life**
 
-- [ ] Create a Trello account if you don't have one already
-- [ ] Create a new board called "GameOfLife - {Your Name}"
-- [ ] Create lists titled `backlog`,`To Do`, `In Progress`, and `Done`
-- [ ] Fill in the `To Do` list with the MVP features listed below
-- [ ] Fill in the `backlog` list with all the extra features listed below
-- [ ] Share your board with the project manager that has been assigned to you. If you have not been assigned yet, reach out to your lead PM for guidance
-- [ ] Add your Trello URL to your project's README.md file. Commit the change, push it to your repository & submit a pull request
+The general concept of Life had been around for about 30 years prior to John Conway's popularization by using a 2D array. After his implementation the area exploded with new growth and began to reach outside the world of academia.
 
+The idea of cellular automaton was that you take a grid and a finite number of states (like off and on). Each state of an individual cell would then affect the state of a neighboring cell. Using this idea a set of rules for Life developed.
 
-## MVP Features:
-
-### Preliminary Work
-- [ ] Research Conway’s “Game of Life”. Figure out how it works, why it’s useful, and how the notion of Turing Completeness is related to this topic.
-
-### Building Your App
-
-#### Visualizing the “Game of Life”
-The main entry point of your application should house the visualization of this cellular automata. Include necessary components, such as:
-- [ ] Grid to display cells. 
-- [ ] Cell objects or components that, at a minimum, should have:
-    * Properties
-        - [ ] currentState: (alive, dead), (black, white)
-        - [ ] isClickable:
-          - can be clicked to allow user to setup initial cell configuration 
-          - should NOT be clickable while simulation is running
-    * Behaviors
-        - [ ] toggle_state( ): switch between alive & dead either because user manually toggled cell before starting simulation or simulation is running and rules of life caused cell to change state
-- [ ] An appropriate data structure to hold a grid of cells that is at least 15 X 15. 
-- [ ] Text to display current generation # being displayed
-    * Utilize a timeout function to build the next generation of cells & update the display at the chosen time interval     
-- [ ] Button(s) that start & stop the animation
-- [ ] Button to clear the grid
-
-Write an algorithm that:    
-- [ ] Implements the following basic steps:
-    - For each cell in the current generation's grid:
-      1. Examine state of all eight neighbors (it's up to you whether you want cells to wrap around the grid and consider cells on the other side or not)
-      2.  Apply rules of life to determine if this cell will change states
-    - When loop completes:
-      1. Swap current and next grids
-      2. Repeat until simulation stopped
-- [ ] Breaks down above steps into appropriate sub-tasks implemented with helper functions to improve readability
-- [ ] Uses double buffering to update grid with next generation.
-
-### Custom Features
-Implment at least 3 of the following features:
-- [ ] Create a few sample cell configurations that users can load and run 
-- [ ] Add an option that creates a random cell configuration that users can run
-- [ ] Add additional cell properties, like color or size, and incorporate them into your visualization
-- [ ] Allow users to specify the speed of the simulation
-- [ ] Provide functionality to manually step through the simulation one generation at a time, as opposed to animating automatically
-- [ ] Allow users to change the dimension of the grid being displayed
-- [ ] Given a specific generation, calculate the configuration of cells at that point in time, and jump to that state, bypassing animation
-- [ ] If you have an idea for a custom feature on this list, run it by your PM or instructor
-
-#### Rules 
-- [ ] On the main entry point of the application, include a separate section or link to another page / screen that describes the two main rules (birth & death) of Conway’s “Game of Life”
-
-#### About this Algorithm
-- [ ]  On the main entry point of the application, include a separate section or link to another page / screen that describes more about Conway’s “Game of Life”, such as whether or not it is Turing Complete or the history of this cellular automaton
-
-### Deployment
-- [ ] Deploy your app using a tool like [GitHub Pages or Heroku](resources/deployment)
+---
+**Conway's Rules**
 
 
-## Stretch Goals
-- [ ] Write a how-to guide or blog post that walks readers through the work you did to implement your project
-- [ ] Expand your simulation into the third dimension - [check out 3D-ThreeJS](https://github.com/LambdaSchool/3D-ThreeJS)
-- [ ] Explore alternate algorithms for finding the nth generation, such as [Hashlife](https://en.wikipedia.org/wiki/Hashlife)
+* Any live cell with fewer than two live neighbors dies, as if by underpopulation.
 
+* Any live cell with two or three live neighbors lives on to the next generation.
 
-## Sample Wireframe
+* Any live cell with more than three live neighbors dies, as if by overpopulation.
 
-![wireframe](wireframes/wireframe_1.png)
+* Any dead cell with three live neighbors becomes a live cell, as if by reproduction.
 
+---
+## **Step 2 - Plan**
 
-## Rubric
+Armed with our knowledge of the history of the problem and the rules we can go about thinking how to implement this ourselves. A good first step is to think about how you would implement the grid. We know that as we go through generations this will need to animate quickly and need to keep that in mind. I decided to implement my solution with a series of boxes with a border that forms a grid. You could also do this with the HTML `canvas` element. This would generally be a more performant way of running this.
 
-#### Your simulation will receive a 2 when it satisfies the following:
-   1. Display includes a text area that shows the current generation of cells being displayed
-   2. Display includes a grid of cells, at least 15 x 15, that can be toggled to be _alive_ or _dead_
-   3. Display includes working buttons that start / stop the animation and clear the grid
-   4. Algorithm to generate new generations of cells correctly implemented
-   5. Display is updated seamlessly using double buffering
-   6. At least 3 features from ***Custom Features*** section successfully implemented
-   7. Application includes a section outlining the rules to Conway's "Game of Life" 
-   8. Application includes a section that describes history of / technical details related to Conway's "Game of Life"
-   9. Application is successfully deployed
-   
+Once we have a grid set up we need to start thinking about how we can represent our data in the grid. This would be a good time to look over something called a double buffer. A double buffer will allow us to display one set of data and then switch to a whole new set all at one, to prevent a partial update. This is very much like the problem in cellular automaton where we need to be able to change the state based on our neighbors, but all at once, not one at a time. If we just ran through the elements changing values we would not get an accurate result, so we need to make sure we do not manipulate the array of values while we are still constructing the new array. Once we have finished constructing our new array of values we need to replace the first one with it.
 
-#### Your simulation will receive a 3 when it satisfies all of the above requirements AND implements one of the following stretech goals:
-   * Write a how-to guide or blog post that walks readers through the work you did to implement your project
-   * Expand your simulation into the third dimension - [check out 3D-ThreeJS](https://github.com/LambdaSchool/3D-ThreeJS)
-   * Explore alternate algorithms for finding the nth generation, such as [Hashlife](https://en.wikipedia.org/wiki/Hashlife)
+But how do we change those values to construct the second array? To do this we need to implement Conway's Rules of Life. This is not easy, but there are a few concepts that will really help. We need to think about how to identify all neighbors of a cell in a grid. We can do this with two loops running through our rows and columns of the grid.
+
+There are 8 neighbors for every cell. If we are representing our current row and the current column running in loops, we can think about selecting our neighbors like this.
+
+```js
+
+[col - 1, row + 1]   [col, row + 1]   [col + 1, row + 1]
+[col - 1, row]       [col, row]       [col + 1, row]
+[col - 1, row - 1]   [col, row - 1]   [col + 1, row - 1]
+
+```
+
+Now that we can select the cells we need we can start to count up the live cells around us and then apply conway's rules to see if the cell will make it to the next generation. Once we have achieved this we can set the arrays for the next generation and display the new one in our grid. Doing something like changing the color of a cell for live or dead is a great way to see your progress.
+
+---
+
+## **Step 3 - Carry out the plan**
+
+We have a good plan together, we understand the problem. It is time to start coding. You may run into unexpected hurdles here but stick with the plan. Make sure you refer back to the plan when you get stuck, and if you still feel lost maybe you need to go back to Step 1 and understand the problem a bit better. If you go back with a more specific problem this can be helpful for fully understanding. If canvas is confusing, decide if you can think of another way to achieve your goals without it.
+
+---
+
+## **Step 4 - Look Back**
+
+Now that you have come to a solution you are ready to look back on what you did, and think about what you can do better or some possible edge cases you may not have accounted for. See if you can optimize your code to run as fast as possible, or make your grid really large to test your performance.
