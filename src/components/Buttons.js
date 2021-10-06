@@ -1,6 +1,6 @@
 import React from 'react';
 // import styled from 'styled-components'
-import { Button } from 'semantic-ui-react'
+// import { Button } from 'semantic-ui-react'
 import '../index.css'
 
 
@@ -13,7 +13,7 @@ class Buttons extends React.Component {
                 <button className='control-button' onClick={this.props.incrementButton}>Increment</button>
                 <button className='control-button' onClick={this.props.clear}>Clear</button>
                 <button className='control-button' onClick={this.props.resetButton}>Reset</button>
-                <button className='control-button' onClick={this.props.speedButton}>{this.props.speed}x Speed</button>
+                {/* <button className='control-button' onClick={this.props.speedButton}>{this.props.speed}x Speed</button> */}
             </div>
         )
     }
